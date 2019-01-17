@@ -1,0 +1,96 @@
+<style lang="less">
+.pvkbd {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: #e4e4e4;
+  box-shadow: 0 -4px 10px 2px rgba(0, 0, 0, .15);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 10px 2%;
+  padding-bottom: 5px;
+  bottom: -450px;
+  transition: bottom 400ms ease-out;
+  z-index: 600;
+}
+.pvkbd.show {
+  bottom: 0;
+  transition: bottom 400ms ease-out;
+}
+.province-box {
+  background: #fff;
+  color: #444;
+  font-size: 30px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  width: 11.8%;
+  text-align: center;
+  line-height: 2.6;
+}
+.province-box:active {
+  background: rgb(240, 240, 240);
+}
+.hide-box {
+  width: 36.5%;
+  background: #c5c5c5;
+  color: #fff;
+}
+</style>
+<template>
+  <view class="pvkbd {{ aniClass }}">
+    <block wx:for="{{ provinces }}" wx:for-item="pro" wx:key="pro">
+      <view @tap="tapProvince('{{pro}}')" class="province-box">{{ pro }}</view>
+    </block>
+    <view @tap="hideThis" class="province-box hide-box">隐藏</view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Pvkbd extends wepy.component {
+    data = {
+      provinces: [
+        '京', '津', '渝', '沪', '冀', '晋', '辽', '吉', '黑', '苏', '浙', '皖', '闽', '赣', '鲁', '豫', '鄂', '湘', '粤', '琼', '川', '贵', '云', '陕', '甘', '青', '蒙', '桂', '宁', '新', '藏', '使', '领', '警', '学', '港', '澳'
+      ],
+      aniClass: ''
+    }
+
+    props = {
+
+    }
+
+    methods = {
+      hideThis() {
+        this.aniClass = ''
+      },
+      tapProvince(province) {
+        this.$emit('setProvince', province)
+        this.aniClass = ''
+      }
+    }
+
+    events = {
+      'showKbd': ($event) => {
+        this.aniClass = 'show'
+      },
+      'hideKbd': ($event) => {
+        this.aniClass = ''
+      },
+      'toggleKbd': ($event) => {
+        console.log('toggleKbd')
+        if (this.aniClass === '') {
+          this.aniClass = 'show'
+        } else {
+          this.aniClass = ''
+        }
+      }
+    }
+
+    onReady() {
+
+    }
+  }
+</script>
